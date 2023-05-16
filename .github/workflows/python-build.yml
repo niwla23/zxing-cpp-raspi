@@ -38,7 +38,7 @@ jobs:
           CIBW_SKIP: "*musllinux*"
       with:
         commands: |
-            apt install python3-pip
+            apt install -y python3-pip
             python3 -m pip install cibuildwheel==2.12.1
             python3 -m cibuildwheel --output-dir wheelhouse wrappers/python
 
