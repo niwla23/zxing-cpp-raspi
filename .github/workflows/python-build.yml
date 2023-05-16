@@ -38,7 +38,7 @@ jobs:
           CIBW_SKIP: "*musllinux*"
       with:
         commands: |
-            apt install -y python3-pip
+            apt install -y python3-pip cmake 
             cd wrappers/python
             python3 -m pip install setuptools
             python3 setup.py install
