@@ -9,8 +9,8 @@ on:
       publish:
         description: 'Publish package (y/n)'
         default: 'n'
-#  push:
-#    branches: [master]
+  push:
+    branches: [master]
 #    tags: ["v*.*.*"]
 #  pull_request:
 #    branches: [master]
