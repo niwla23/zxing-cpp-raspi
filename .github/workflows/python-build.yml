@@ -39,7 +39,7 @@ jobs:
       with:
         commands: |
             apt install -y python3-pip
-            cd wrappers/python3
+            cd wrappers/python
             python3 -m pip install setuptools
             python3 setup.py install
 
