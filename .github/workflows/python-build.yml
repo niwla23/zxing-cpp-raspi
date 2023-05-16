@@ -32,16 +32,16 @@ jobs:
       with:
         python-version: '3.9'
 
-    - name: Install cibuildwheel
-      run: python3 -m pip install cibuildwheel==2.12.1
-
-    - name: Build wheels
-      run: python3 -m cibuildwheel --output-dir wheelhouse wrappers/python
+    - uses: pguyot/arm-runner-action@v2
       env:
-        CIBW_BUILD: cp39-* cp310-* cp311-*
-        CIBW_SKIP: "*musllinux*"
-        CIBW_ARCHS_MACOS: universal2
-        CIBW_ENVIRONMENT_MACOS: CMAKE_OSX_ARCHITECTURES="arm64;x86_64"
+          CIBW_BUILD: cp39-* cp310-* cp311-*
+          CIBW_SKIP: "*musllinux*"
+          CIBW_ARCHS_MACOS: universal2
+          CIBW_ENVIRONMENT_MACOS: CMAKE_OSX_ARCHITECTURES="arm64;x86_64"
+      with:
+        commands: |
+            python3 -m pip install cibuildwheel==2.12.1
+            python3 -m cibuildwheel --output-dir wheelhouse wrappers/python
 
     - uses: actions/upload-artifact@v3
       with:
@@ -68,21 +68,3 @@ jobs:
       with:
         path: wrappers/python/dist/*.tar.gz
 
-  upload-pypi:
-    name: Deploy
-    needs: [build-wheels, build-sdist]
-    runs-on: ubuntu-latest
-    # only run if the commit is tagged...
-#    if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v')
-    if: github.event_name == 'release' || github.event.inputs.publish == 'y'
-    steps:
-      - uses: actions/download-artifact@v3
-        with:
-          name: artifact
-          path: dist
-
-      - uses: pypa/gh-action-pypi-publish@release/v1
-        with:
-          user: __token__
-          password: ${{ secrets.PYPI_TOKEN }}
-          # To test: repository_url: https://test.pypi.org/legacy/
